@@ -156,11 +156,23 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   function harvestItem(uint _upc, address _originFarmerID, string _originFarmName, string _originFarmInformation, string  _originFarmLatitude, string  _originFarmLongitude, string  _productNotes) public
   {
     // Add the new item as part of Harvest
+    Item memory newItem;
+    newItem.sku = sku;
+    newItem.upc = _upc;
+    newItem.ownerID = _originFarmerID;
+    newItem.originFarmerID = _originFarmerID;
+    newItem.originFarmName = _originFarmName;
+    newItem.originFarmLatitude = _originFarmLatitude;
+    newItem.originFarmLongitude = _originFarmLongitude;
+    newItem.productNotes = _productNotes;
+    newItem.itemState = State.Harvested;
 
+    // Add to items mapping by upc
+    items[_upc] = newItem;
     // Increment sku
     sku = sku + 1;
     // Emit the appropriate event
-
+    emit Harvested(_upc);
   }
 
   // Define a function 'processtItem' that allows a farmer to mark an item 'Processed'
