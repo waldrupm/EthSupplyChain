@@ -170,6 +170,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
     newItem.originFarmName = _originFarmName;
     newItem.originFarmLatitude = _originFarmLatitude;
     newItem.originFarmLongitude = _originFarmLongitude;
+    newItem.productID = sku + _upc;
     newItem.productNotes = _productNotes;
     newItem.itemState = State.Harvested;
 
@@ -232,41 +233,38 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
 
   // Define a function 'shipItem' that allows the distributor to mark an item 'Shipped'
   // Use the above modifers to check if the item is sold
-  function shipItem(uint _upc) public
-    // Call modifier to check if upc has passed previous supply chain stage
-
-    // Call modifier to verify caller of this function
+  function shipItem(uint _upc) public sold(_upc) verifyCaller(items[_upc].ownerID)
 
     {
     // Update the appropriate fields
-
-    // Emit the appropriate event
+    items[_upc].itemState = State.Shipped;
+    emit Shipped(_upc);
 
   }
 
   // Define a function 'receiveItem' that allows the retailer to mark an item 'Received'
   // Use the above modifiers to check if the item is shipped
-  function receiveItem(uint _upc) public
-    // Call modifier to check if upc has passed previous supply chain stage
-
+  function receiveItem(uint _upc) public shipped(_upc) 
     // Access Control List enforced by calling Smart Contract / DApp
     {
     // Update the appropriate fields - ownerID, retailerID, itemState
-
-    // Emit the appropriate event
+      items[_upc].ownerID = msg.sender;
+      items[_upc].retailerID = msg.sender;
+      items[_upc].itemState = State.Received;
+      emit received(_upc);
 
   }
 
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
   // Use the above modifiers to check if the item is received
-  function purchaseItem(uint _upc) public
-    // Call modifier to check if upc has passed previous supply chain stage
-
+  function purchaseItem(uint _upc) public received(_upc)
     // Access Control List enforced by calling Smart Contract / DApp
     {
     // Update the appropriate fields - ownerID, consumerID, itemState
-
-    // Emit the appropriate event
+      items[_upc].ownerID = msg.sender;
+      items[_upc].consumerID = msg.sender;
+      items[_upc].itemState = State.Purchased;
+      emit purchased(_upc);
 
   }
 
@@ -284,7 +282,14 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   )
   {
   // Assign values to the 8 parameters
-
+    itemSKU = items[_upc].sku;
+    itemUPC = items[_upc].upc;
+    ownerID = items[_upc].ownerID;
+    originFarmerID = items[_upc].originFarmerID;
+    originFarmName = items[_upc].originFarmName;
+    originFarmInformation = items[_upc].originFarmInformation;
+    originFarmLatitude = items[_upc].originFarmLatitude;
+    originFarmLongitude = items[_upc].originFarmLongitude;
 
   return
   (
@@ -314,7 +319,15 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   )
   {
     // Assign values to the 9 parameters
-
+    itemSKU = items[_upc].sku;
+    itemUPC = items[_upc].upc;
+    productID = items[_upc].productID;
+    productNotes = items[_upc].productNotes;
+    productPrice = items[_upc].productPrice;
+    itemState = items[_upc].itemState;
+    distributorID = items[_upc].distributorID;
+    retailerID = items[_upc].retailerID;
+    consumerID = items[_upc].consumerID;
 
   return
   (
