@@ -1,9 +1,16 @@
 pragma solidity ^0.4.24;
+
+import "../coffeeaccesscontrol/ConsumerRole.sol";
+import "../coffeeaccesscontrol/DistributorRole.sol";
+import "../coffeeaccesscontrol/FarmerRole.sol";
+import "../coffeeaccesscontrol/RetailerRole.sol";
+import "../coffeecore/Ownable.sol";
+
 // Define a contract 'Supplychain'
 contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, RetailerRole {
 
   // Define 'owner'
-  address owner;
+  // address owner;
 
   // Define a variable called 'upc' for Universal Product Code (UPC)
   uint  upc;
@@ -63,10 +70,10 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   event Purchased(uint upc);
 
   // Define a modifer that checks to see if msg.sender == owner of the contract
-  modifier onlyOwner() {
-    require(msg.sender == owner, "You must be the owner to do this");
-    _;
-  }
+  // modifier onlyOwner() {
+  //   require(msg.sender == contractOwner, "You must be the owner to do this");
+  //   _;
+  // }
 
   // Define a modifer that verifies the Caller
   modifier verifyCaller (address _address) {
@@ -146,15 +153,15 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   // and set 'sku' to 1
   // and set 'upc' to 1
   constructor() public payable {
-    owner = msg.sender;
+    // owner = msg.sender;
     sku = 1;
     upc = 1;
   }
 
   // Define a function 'kill' if required
   function kill() public {
-    if (msg.sender == owner) {
-      selfdestruct(owner);
+    if (msg.sender == owner()) {
+      selfdestruct(owner());
     }
   }
 
@@ -168,6 +175,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
     newItem.ownerID = _originFarmerID;
     newItem.originFarmerID = _originFarmerID;
     newItem.originFarmName = _originFarmName;
+    newItem.originFarmInformation = _originFarmInformation;
     newItem.originFarmLatitude = _originFarmLatitude;
     newItem.originFarmLongitude = _originFarmLongitude;
     newItem.productID = sku + _upc;
@@ -183,8 +191,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   }
 
   // Define a function 'processtItem' that allows a farmer to mark an item 'Processed'
-  function processItem(uint _upc) harvested(_upc) verifyCaller(items[_upc].ownerID) public
-
+  function processItem(uint _upc) public harvested(_upc) verifyCaller(items[_upc].ownerID)
   {
     // Update the appropriate fields
     items[_upc].itemState = State.Processed;
@@ -206,6 +213,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   function sellItem(uint _upc, uint _price) public packed(_upc) verifyCaller(items[_upc].ownerID)
   {
     // Update the appropriate fields
+    items[_upc].productPrice = _price;
     items[_upc].itemState = State.ForSale;
     emit ForSale(_upc);
   
@@ -244,14 +252,14 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
 
   // Define a function 'receiveItem' that allows the retailer to mark an item 'Received'
   // Use the above modifiers to check if the item is shipped
-  function receiveItem(uint _upc) public shipped(_upc) 
+  function receiveItem(uint _upc) public shipped(_upc)
     // Access Control List enforced by calling Smart Contract / DApp
     {
     // Update the appropriate fields - ownerID, retailerID, itemState
       items[_upc].ownerID = msg.sender;
       items[_upc].retailerID = msg.sender;
       items[_upc].itemState = State.Received;
-      emit received(_upc);
+      emit Received(_upc);
 
   }
 
@@ -264,7 +272,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
       items[_upc].ownerID = msg.sender;
       items[_upc].consumerID = msg.sender;
       items[_upc].itemState = State.Purchased;
-      emit purchased(_upc);
+      emit Purchased(_upc);
 
   }
 
@@ -312,7 +320,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   uint    productID,
   string  productNotes,
   uint    productPrice,
-  uint    itemState,
+  State    itemState,
   address distributorID,
   address retailerID,
   address consumerID
