@@ -125,6 +125,7 @@ App = {
         event.preventDefault();
 
         App.getMetaskAccountID();
+        App.readForm();
 
         var processId = parseInt($(event.target).data('id'));
         console.log('processId',processId);
