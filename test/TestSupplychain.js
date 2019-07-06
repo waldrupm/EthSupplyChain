@@ -126,39 +126,27 @@ contract('SupplyChain', function(accounts) {
     it("Testing smart contract function shipItem() that allows a distributor to ship coffee", async() => {
         const supplychain = await SupplyChain.deployed();
         
-        // Declare and Initialize a variable for event
+        let tx = await supplychain.shipItem(upc, { from: distributorID } );
+        trfAssert.eventEmitted(tx, 'Shipped');
         
-        
-        // Watch the emitted event Shipped()
-        
+        const itemInfo = await supplychain.fetchItemBufferTwo.call(upc);
 
-        // Mark an item as Sold by calling function buyItem()
-        
-
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
-        // Verify the result set
-              
+        assert.equal(itemInfo[5], '5', 'Error: Incorrect item state');              
     })    
 
     // 7th Test
     it("Testing smart contract function receiveItem() that allows a retailer to mark coffee received", async() => {
         const supplychain = await SupplyChain.deployed();
         
-        // Declare and Initialize a variable for event
-        
-        
-        // Watch the emitted event Received()
-        
+        let tx = await supplychain.receiveItem(upc, { from: retailerID } );
+        trfAssert.eventEmitted(tx, 'Received');
 
-        // Mark an item as Sold by calling function buyItem()
-        
+        const itemInfo1 = await supplychain.fetchItemBufferOne.call(upc);
+        const itemInfo2 = await supplychain.fetchItemBufferTwo.call(upc);
 
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
-        // Verify the result set
+        assert.equal(itemInfo1[2], retailerID, 'Error: Retailer not owner after receipt');
+        assert.equal(itemInfo2[5], '6', 'Error: Incorrect item state');
+        assert.equal(itemInfo2[7], retailerID, 'Error: Incorrect retailerID');
              
     })    
 
@@ -166,19 +154,15 @@ contract('SupplyChain', function(accounts) {
     it("Testing smart contract function purchaseItem() that allows a consumer to purchase coffee", async() => {
         const supplychain = await SupplyChain.deployed();
         
-        // Declare and Initialize a variable for event
-        
-        
-        // Watch the emitted event Purchased()
-        
+        let tx = await supplychain.purchaseItem(upc, { from: consumerID });
+        trfAssert.eventEmitted(tx, 'Purchased');
 
-        // Mark an item as Sold by calling function buyItem()
-        
+        const itemInfo1 = await supplychain.fetchItemBufferOne.call(upc);
+        const itemInfo2 = await supplychain.fetchItemBufferTwo.call(upc);
 
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
-
-        // Verify the result set
+        assert.equal(itemInfo1[2], consumerID, 'Error: Consumer not owner after purchase');
+        assert.equal(itemInfo2[5], '7', 'Error: Incorrect item state');
+        assert.equal(itemInfo2[8], consumerID, 'Error: Incorrect consumerID');
         
     })    
 
@@ -186,17 +170,37 @@ contract('SupplyChain', function(accounts) {
     it("Testing smart contract function fetchItemBufferOne() that allows anyone to fetch item details from blockchain", async() => {
         const supplychain = await SupplyChain.deployed();
 
-        // Retrieve the just now saved item from blockchain by calling function fetchItem()
         
+        let itemInfo1 = await supplychain.fetchItemBufferOne.call(upc);
         
-        // Verify the result set:
+        expect(itemInfo1[0]).to.deep.equal(web3.utils.toBN(sku));
+        expect(itemInfo1[1]).to.deep.equal(web3.utils.toBN(upc));
+        expect(itemInfo1[2]).to.deep.equal(accounts[4]);
+        expect(itemInfo1[3]).to.deep.equal(accounts[1]);
+        expect(itemInfo1[4]).to.deep.equal(originFarmName);
+        expect(itemInfo1[5]).to.deep.equal(originFarmInformation);
+        expect(itemInfo1[6]).to.deep.equal(originFarmLatitude);
+        expect(itemInfo1[7]).to.deep.equal(originFarmLongitude);
         
     })
-
+    
     // 10th Test
     it("Testing smart contract function fetchItemBufferTwo() that allows anyone to fetch item details from blockchain", async() => {
         const supplychain = await SupplyChain.deployed();
+        const BN = web3.utils.toBN;
+        
+        let itemInfo2 = await supplychain.fetchItemBufferTwo.call(upc);
 
+        expect(itemInfo2[0]).to.deep.equal(BN(sku));
+        expect(itemInfo2[1]).to.deep.equal(BN(upc));
+        expect(itemInfo2[2]).to.deep.equal(BN(sku+upc));
+        expect(itemInfo2[3]).to.deep.equal(productNotes);
+        expect(itemInfo2[4]).to.deep.equal(BN(productPrice));
+        expect(itemInfo2[5]).to.deep.equal(BN('7'));
+        expect(itemInfo2[6]).to.deep.equal(distributorID);
+        expect(itemInfo2[7]).to.deep.equal(retailerID);
+        expect(itemInfo2[8]).to.deep.equal(consumerID);
+        // sku, upc, sku+upc, productNotes, productPrice, '7', distributorID, retailerID, consumerID];
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         
         
