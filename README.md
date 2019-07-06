@@ -14,7 +14,8 @@ Contract Deployment Transaction hash: 0xa5a3fd58e93bb69d36d5d2f10fdb087c32a71255
 
 
 ### UML Diagrams
-![Sequence Diagram](https://raw.githubusercontent.com/waldrupm/EthSupplyChain/master/UML/ActivityDiagram.png)
-![Activity Diagram](https://raw.githubusercontent.com/waldrupm/EthSupplyChain/master/UML/SequenceDiagram.png)
+![Activity Diagram](https://raw.githubusercontent.com/waldrupm/EthSupplyChain/master/UML/ActivityDiagram.png)
+## Sequence Diagram
+![Sequence Diagram](https://raw.githubusercontent.com/waldrupm/EthSupplyChain/master/UML/SequenceDiagram.png)
 ![State Diagram](https://raw.githubusercontent.com/waldrupm/EthSupplyChain/master/UML/StateDiagram.png)
 
