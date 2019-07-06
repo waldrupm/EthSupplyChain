@@ -191,7 +191,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   }
 
   // Define a function 'processtItem' that allows a farmer to mark an item 'Processed'
-  function processItem(uint _upc) public harvested(_upc) verifyCaller(items[_upc].ownerID)
+  function processItem(uint _upc) public harvested(_upc) verifyCaller(items[_upc].originFarmerID)
   {
     // Update the appropriate fields
     items[_upc].itemState = State.Processed;
@@ -200,8 +200,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   }
 
   // Define a function 'packItem' that allows a farmer to mark an item 'Packed'
-  function packItem(uint _upc) processed(_upc) verifyCaller(items[_upc].ownerID) public
-
+  function packItem(uint _upc) public processed(_upc) verifyCaller(items[_upc].originFarmerID)
   {
     // Update the appropriate fields
     items[_upc].itemState = State.Packed;
@@ -210,7 +209,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   }
 
   // Define a function 'sellItem' that allows a farmer to mark an item 'ForSale'
-  function sellItem(uint _upc, uint _price) public packed(_upc) verifyCaller(items[_upc].ownerID)
+  function sellItem(uint _upc, uint _price) public packed(_upc) verifyCaller(items[_upc].originFarmerID)
   {
     // Update the appropriate fields
     items[_upc].productPrice = _price;
@@ -241,7 +240,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
 
   // Define a function 'shipItem' that allows the distributor to mark an item 'Shipped'
   // Use the above modifers to check if the item is sold
-  function shipItem(uint _upc) public sold(_upc) verifyCaller(items[_upc].ownerID)
+  function shipItem(uint _upc) public sold(_upc) verifyCaller(items[_upc].distributorID)
 
     {
     // Update the appropriate fields
@@ -349,5 +348,8 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   retailerID,
   consumerID
   );
+  }
+
+  function () external payable {
   }
 }
