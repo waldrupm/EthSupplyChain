@@ -166,7 +166,9 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   }
 
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
-  function harvestItem(uint _upc, address _originFarmerID, string _originFarmName, string _originFarmInformation, string  _originFarmLatitude, string  _originFarmLongitude, string  _productNotes) onlyNewItems(_upc) public
+  function harvestItem(uint _upc, address _originFarmerID, string _originFarmName, string _originFarmInformation,
+  string  _originFarmLatitude, string  _originFarmLongitude, string  _productNotes)
+  public onlyNewItems(_upc)
   {
     // Add the new item as part of Harvest
     Item memory newItem;
@@ -215,7 +217,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
     items[_upc].productPrice = _price;
     items[_upc].itemState = State.ForSale;
     emit ForSale(_upc);
-  
+
     // Emit the appropriate event
 
   }
