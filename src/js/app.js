@@ -198,6 +198,8 @@ App = {
             );
         }).then(function(result) {
             $("#ftc-item").text(result);
+            App.fetchItemBufferOne();
+            App.fetchItemBufferTwo();
             console.log('harvestItem',result);
         }).catch(function(err) {
             console.log(err.message);

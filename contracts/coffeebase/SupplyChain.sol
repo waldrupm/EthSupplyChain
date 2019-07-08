@@ -89,10 +89,10 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
 
   // Define a modifier that checks the price and refunds the remaining balance
   modifier checkValue(uint _upc) {
-    _;
     uint _price = items[_upc].productPrice;
     uint amountToReturn = msg.value - _price;
     msg.sender.transfer(amountToReturn);
+    _;
   }
 
   // Modifier to prevent farmers from "reclaiming" upcs already used
