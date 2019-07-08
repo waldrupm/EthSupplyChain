@@ -2,10 +2,10 @@
 
 ### Contract Information
 
-Contract Address: 0x232d35C0a161bc26cBcd13ceF4D8dEC7d60260dd
-[Contract Etherscan Link](https://rinkeby.etherscan.io/address/0x232d35C0a161bc26cBcd13ceF4D8dEC7d60260dd)
+Contract Address: 0xac673c9d6997BaD032D607a6408a9D006E999027
+[Contract Etherscan Link](https://rinkeby.etherscan.io/address/0xac673c9d6997BaD032D607a6408a9D006E999027)
 
-Contract Deployment Transaction hash: 0x3cfd9b7bde09c959adfc1eb382a0a43c2069047507d13e792b59ea991be869ab
+Contract Deployment Transaction hash: 0x780450d6e10fffd3f118bd8d76c04d9648ba60c723c7d30e3f9673771860d7ca
 
 ### Libraries Used
 
