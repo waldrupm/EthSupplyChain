@@ -259,6 +259,8 @@ App = {
             return instance.buyItem(App.upc, {from: App.metamaskAccountID, value: walletValue});
         }).then(function(result) {
             $("#ftc-item").text(result);
+            App.fetchItemBufferOne();
+            App.fetchItemBufferTwo();
             console.log('buyItem',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -287,6 +289,8 @@ App = {
             return instance.receiveItem(App.upc, {from: App.metamaskAccountID});
         }).then(function(result) {
             $("#ftc-item").text(result);
+            App.fetchItemBufferOne();
+            App.fetchItemBufferTwo();
             console.log('receiveItem',result);
         }).catch(function(err) {
             console.log(err.message);
@@ -301,6 +305,8 @@ App = {
             return instance.purchaseItem(App.upc, {from: App.metamaskAccountID});
         }).then(function(result) {
             $("#ftc-item").text(result);
+            App.fetchItemBufferOne();
+            App.fetchItemBufferTwo();
             console.log('purchaseItem',result);
         }).catch(function(err) {
             console.log(err.message);
