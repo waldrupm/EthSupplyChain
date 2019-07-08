@@ -120,6 +120,24 @@ App = {
     bindEvents: function() {
         $(document).on('click', App.handleButtonClick);
     },
+    populateFormFields: function(set, data) {
+        if(set === 1) {
+            $('#sku').val(data[0]);
+            $('#ownerID').val(data[2]);
+            $('#originFarmerID').val(data[3]);
+            $('#originFarmName').val(data[4]);
+            $('#originFarmInformation').val(data[5]);
+            $('#originFarmLatitude').val(data[6]);
+            $('#originFarmLongitude').val(data[7]);
+        } else if(set === 2) {
+            $('#sku').val(data[0]);
+            $('#productNotes').val(data[3]);
+            $('#productPrice').val(web3.fromWei(data[4], "ether"));
+            $('#distributorID').val(data[6]);
+            $('#retailerID').val(data[7]);
+            $('#consumerID').val(data[8]);
+        }
+    },
 
     handleButtonClick: async function(event) {
         event.preventDefault();
@@ -221,7 +239,7 @@ App = {
         App.contracts.SupplyChain.deployed().then(function(instance) {
             const productPrice = web3.toWei(1, "ether");
             console.log('productPrice',productPrice);
-            return instance.sellItem(App.upc, App.productPrice, {from: App.metamaskAccountID});
+            return instance.sellItem(App.upc, productPrice, {from: App.metamaskAccountID});
         }).then(function(result) {
             $("#ftc-item").text(result);
             console.log('sellItem',result);
@@ -297,6 +315,7 @@ App = {
           return instance.fetchItemBufferOne(App.upc);
         }).then(function(result) {
           $("#ftc-item").text(result);
+          App.populateFormFields(1, result);
           console.log('fetchItemBufferOne', result);
         }).catch(function(err) {
           console.log(err.message);
@@ -311,6 +330,7 @@ App = {
           return instance.fetchItemBufferTwo.call(App.upc);
         }).then(function(result) {
           $("#ftc-item").text(result);
+          App.populateFormFields(2, result);
           console.log('fetchItemBufferTwo', result);
         }).catch(function(err) {
           console.log(err.message);
