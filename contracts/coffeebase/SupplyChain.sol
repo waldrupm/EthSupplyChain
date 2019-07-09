@@ -168,7 +168,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
   function harvestItem(uint _upc, address _originFarmerID, string _originFarmName, string _originFarmInformation,
   string  _originFarmLatitude, string  _originFarmLongitude, string  _productNotes)
-  public onlyNewItems(_upc)
+  public onlyNewItems(_upc) onlyFarmer()
   {
     // Add the new item as part of Harvest
     Item memory newItem;
@@ -225,7 +225,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
   // Define a function 'buyItem' that allows the disributor to mark an item 'Sold'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough,
   // and any excess ether sent is refunded back to the buyer
-  function buyItem(uint _upc) public forSale(_upc) paidEnough(items[_upc].productPrice) checkValue(_upc) payable
+  function buyItem(uint _upc) public forSale(_upc) paidEnough(items[_upc].productPrice) checkValue(_upc) onlyDistributor() payable
     {
 
     // Update the appropriate fields - ownerID, distributorID, itemState
@@ -253,7 +253,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
 
   // Define a function 'receiveItem' that allows the retailer to mark an item 'Received'
   // Use the above modifiers to check if the item is shipped
-  function receiveItem(uint _upc) public shipped(_upc)
+  function receiveItem(uint _upc) public shipped(_upc) onlyRetailer()
     // Access Control List enforced by calling Smart Contract / DApp
     {
     // Update the appropriate fields - ownerID, retailerID, itemState
@@ -266,7 +266,7 @@ contract SupplyChain is Ownable, ConsumerRole, DistributorRole, FarmerRole, Reta
 
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
   // Use the above modifiers to check if the item is received
-  function purchaseItem(uint _upc) public received(_upc)
+  function purchaseItem(uint _upc) public received(_upc) onlyConsumer()
     // Access Control List enforced by calling Smart Contract / DApp
     {
     // Update the appropriate fields - ownerID, consumerID, itemState
