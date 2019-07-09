@@ -9,13 +9,17 @@ Contract Deployment Transaction hash: 0x780450d6e10fffd3f118bd8d76c04d9648ba60c7
 
 ### Libraries Used
 
+Only additional library used was truffle-assertions to make event testing easier and be compatible with Truffle 5.
 
 ### Node / Truffle / Web3 Info
 
+Node 10.15.3
+Truffle 5.0.26
+Web3 1.0.0-beta
 
 ### UML Diagrams
 ![Activity Diagram](https://raw.githubusercontent.com/waldrupm/EthSupplyChain/master/UML/ActivityDiagram.png)
 ## Sequence Diagram
 ![Sequence Diagram](https://raw.githubusercontent.com/waldrupm/EthSupplyChain/master/UML/SequenceDiagram.png)
 ![State Diagram](https://raw.githubusercontent.com/waldrupm/EthSupplyChain/master/UML/StateDiagram.png)
-
+![Data Diagram](https://raw.githubusercontent.com/waldrupm/EthSupplyChain/master/UML/SupplyChainDataDiagram.png)
