@@ -1,11 +1,11 @@
 body {
   background-color:#fff;
-  padding: 2em;
   font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
   color: #212121;
 }
 .container {
   width: 80%;
+  max-width: 968px;
   margin: 0 auto;
 }
 
@@ -22,10 +22,9 @@ input {
 
 button {
     cursor: pointer;
-    background-color: #4CAF50;
     border: none;
     color: white;
-    background-color: #00BCD4;
+    background-color: hsl(171, 100%, 41%);
     font-size: 16px;
     padding: 16px 32px;
     text-decoration: none;
@@ -46,12 +45,11 @@ button {
 }
 
 .form-group {
-  background-color:#0097A7;
-  color:black;
+  color:white;
   width:50%;
   padding:30px;
   border-radius: 4px;
-  background-color: #f8f8f8;
+  background-color: #3a3633;
 }
 
 .form-break {
@@ -63,4 +61,10 @@ button {
 
 .horizontal-rule {
   background-color:#BDBDBD;
+}
+
+.navbar.is-primary .navbar-brand>.navbar-item {
+  color: #333333;
+  font-weight: 700;
+  font-size: 1.5rem;
 }
